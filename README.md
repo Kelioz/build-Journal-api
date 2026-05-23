@@ -1,101 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+**Журнал работ на строительном объекте — Backend**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Коротко: этот репозиторий содержит серверную часть (backend) простого приложения "Журнал работ", в котором прораб может фиксировать выполненные виды работ по датам, объёмы, исполнителей и примечания. Бэкенд реализован на NestJS + TypeScript и использует Prisma для доступа к базе данных.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Ключевые технологии / стек**
 
-## Description
+- Node.js + NestJS (TypeScript)
+- Prisma ORM
+- PostgreSQL (по умолчанию — можно поднять через Docker Compose)
+- Swagger (OpenAPI) для документирования API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Архитектура и основные сущности:
 
-## Project setup
+- `WorkType` — справочник видов работ (напр., "Кладка перегородок").
+- `JournalEntry` — запись в журнале работ (дата, вид работ, объём + единица, исполнитель, примечание).
+- `User` — простая модель пользователя (используется минимально).
 
-```bash
-$ yarn install
-```
+Где смотреть код (важное):
 
-## Compile and run the project
+- Основной код: [src](src)
+- Prisma-схема: [prisma/schema.prisma](prisma/schema.prisma#L1)
+- Docker-compose (Postgres): [docker-compose.yml](docker-compose.yml)
+- Dockerfile (production image): [Dockerfile](Dockerfile)
 
-```bash
-# development
-$ yarn run start
+API и документация
 
-# watch mode
-$ yarn run start:dev
+- Swagger UI доступен по `/api` при запущенном приложении. Там описаны все эндпоинты, схемы запросов и ответов.
 
-# production mode
-$ yarn run start:prod
-```
+Основные эндпоинты (backend):
 
-## Run tests
+- `GET /work-types` — список видов работ (словарь для селекта во фронтенде)
+- `GET /journal?from=YYYY-MM-DD&to=YYYY-MM-DD&sort=asc|desc` — список записей журнала (фильтр по дате, сортировка)
+- `POST /journal` — создать запись (тело: `date`, `workTypeId`, `volume`, `unit`, `performer`, `notes?`)
+- `GET /journal/:id` — получить запись
+- `PUT /journal/:id` — обновить запись
+- `DELETE /journal/:id` — удалить запись
+
+Запуск локально (разработка)
+
+1. Скопируйте `.env` и при необходимости поправьте `DATABASE_URL` (по умолчанию настроен на локальный Postgres):
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+# пример: DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_building?schema=public
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. Установите зависимости и сгенерируйте Prisma-клиент:
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+yarn install
+yarn prisma:generate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+3. Поднимите базу данных (если используете Docker):
 
-## Resources
+```bash
+docker-compose up -d
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+4. Примените схему в базе и засе́дите справочник видов работ (seed):
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+yarn prisma db push
+yarn prisma:seed
+```
 
-## Support
+5. Запустите приложение в режиме разработки:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+yarn start:dev
+```
 
-## Stay in touch
+После старта откройте: http://localhost:3000/api — Swagger UI с примерами запросов и схем.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Запуск через Docker (production image)
 
-## License
+```bash
+# собрать образ
+docker build -t project-name:latest .
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# запустить контейнер (пример)
+docker run -p 3000:3000 --env-file .env project-name:latest
+```
+
+Советы для фронтенда (который требуется по ТЗ)
+
+- Фронтенд должен быть реализован на React + TypeScript.
+- Используйте `GET /work-types` для заполнения выпадающего списка видов работ в форме создания записи.
+- Для таблицы записей используйте `GET /journal` с параметрами `from`/`to` и `sort`.
+
+Что реализовано в этом репозитории
+
+- Backend API (NestJS) с CRUD для `journal` и `work-types`.
+- Prisma-схема и seed для базового набора видов работ.
+- Swagger документация для всех эндпоинтов.
+
+Что можно улучшить / добавить (опции для следующего этапа)
+
+- Пагинация для списка записей (`skip`/`take`).
+- Аутентификация и авторизация (JWT) и связь записей с пользователями/бригадой.
+- Расширенный фронтенд (React + TypeScript) с таблицей, фильтрами и формой.
+
+Если нужно — могу добавить минимальный фронтенд на React+TS или подготовить `docker-compose` для полного стека (backend + postgres + frontend).
+
+---
+
+Автор: команда / разработчик (backend). Для вопросов и запуска — смотрите инструкции выше.
 
 ## Prisma & Swagger
 
