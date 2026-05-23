@@ -1597,7 +1597,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/adapter-pg@npm:^7.3.0":
+"@prisma/adapter-pg@npm:^7.8.0":
   version: 7.8.0
   resolution: "@prisma/adapter-pg@npm:7.8.0"
   dependencies:
@@ -3345,7 +3345,7 @@ __metadata:
     "@nestjs/schematics": "npm:^11.0.0"
     "@nestjs/swagger": "npm:^11.2.5"
     "@nestjs/testing": "npm:^11.0.1"
-    "@prisma/adapter-pg": "npm:^7.3.0"
+    "@prisma/adapter-pg": "npm:^7.8.0"
     "@prisma/client": "npm:^7.3.0"
     "@types/cookie-parser": "npm:^1"
     "@types/express": "npm:^5.0.0"
@@ -3366,6 +3366,7 @@ __metadata:
     jest: "npm:^30.0.0"
     passport: "npm:^0.7.0"
     passport-jwt: "npm:^4.0.1"
+    pg: "npm:^8.11.0"
     prettier: "npm:^3.4.2"
     prisma: "npm:^7.3.0"
     reflect-metadata: "npm:^0.2.2"
@@ -6741,7 +6742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.16.3":
+"pg@npm:^8.11.0, pg@npm:^8.16.3":
   version: 8.21.0
   resolution: "pg@npm:8.21.0"
   dependencies:

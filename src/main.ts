@@ -15,9 +15,15 @@ async function bootstrap() {
     .setDescription('Backend API (Prisma + NestJS)')
     .setVersion('1.0')
     .build();
+  app.setGlobalPrefix('api');
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document, {
+    explorer: true,
+    swaggerOptions: {
+      showRequestDuration: true,
+    },
+  });
   app.use('/api-docs-yaml', (req, res: Response) => {
     res.header('Content-Type', 'application/x-yaml');
     res.send(YAML.stringify(document));

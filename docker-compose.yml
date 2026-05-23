@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: test-works
+    container_name: build-journal-api
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER}
