@@ -81,12 +81,6 @@ docker build -t project-name:latest .
 docker run -p 3000:3000 --env-file .env project-name:latest
 ```
 
-Советы для фронтенда (который требуется по ТЗ)
-
-- Фронтенд должен быть реализован на React + TypeScript.
-- Используйте `GET /work-types` для заполнения выпадающего списка видов работ в форме создания записи.
-- Для таблицы записей используйте `GET /journal` с параметрами `from`/`to` и `sort`.
-
 Что реализовано в этом репозитории
 
 - Backend API (NestJS) с CRUD для `journal` и `work-types`.
@@ -94,8 +88,6 @@ docker run -p 3000:3000 --env-file .env project-name:latest
 - Swagger документация для всех эндпоинтов.
 
 ---
-
-Автор: команда / разработчик (backend). Для вопросов и запуска — смотрите инструкции выше.
 
 ## Prisma & Swagger
 
