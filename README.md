@@ -43,17 +43,23 @@ API и документация
 # пример: DATABASE_URL=postgresql://postgres:postgres@localhost:5432/test_building?schema=public
 ```
 
+## Docker
+
+2. Запустите docker-compose (если используете Docker):
+
+```bash
+docker-compose up -d
+```
+
+После старта откройте: http://localhost:3000/api — Swagger UI с примерами запросов и схем.
+
+## Yarn
+
 2. Установите зависимости и сгенерируйте Prisma-клиент:
 
 ```bash
 yarn install
 yarn prisma:generate
-```
-
-3. Поднимите базу данных (если используете Docker):
-
-```bash
-docker-compose up -d
 ```
 
 4. Примените схему в базе и засе́дите справочник видов работ (seed):
@@ -71,16 +77,6 @@ yarn start:dev
 
 После старта откройте: http://localhost:3000/api — Swagger UI с примерами запросов и схем.
 
-Запуск через Docker (production image)
-
-```bash
-# собрать образ
-docker build -t project-name:latest .
-
-# запустить контейнер (пример)
-docker run -p 3000:3000 --env-file .env project-name:latest
-```
-
 Что реализовано в этом репозитории
 
 - Backend API (NestJS) с CRUD для `journal` и `work-types`.
@@ -88,26 +84,6 @@ docker run -p 3000:3000 --env-file .env project-name:latest
 - Swagger документация для всех эндпоинтов.
 
 ---
-
-## Prisma & Swagger
-
-- Generate Prisma client:
-
-```bash
-yarn prisma:generate
-```
-
-- Run migrations (dev, SQLite):
-
-```bash
-yarn prisma:migrate:dev
-```
-
-- Run the app and open Swagger UI at http://localhost:3000/api
-
-```bash
-yarn start:dev
-```
 
 API (backend) endpoints:
 
