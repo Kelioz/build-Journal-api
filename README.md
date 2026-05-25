@@ -85,18 +85,3 @@ yarn start:dev
 - Swagger документация для всех эндпоинтов.
 
 ---
-
-API (backend) endpoints:
-
-- `GET /work-types` — list available work types (dictionary used in the form)
-- `GET /journal?from=2026-05-01&to=2026-05-31&sort=asc` — list journal entries (filter by ISO dates, sort by date)
-- `POST /journal` — create entry (body: `date`, `workTypeId`, `volume`, `unit`, `performer`, `notes?`)
-- `GET /journal/:id` — get single entry
-- `PUT /journal/:id` — update entry
-- `DELETE /journal/:id` — delete entry
-
-To seed initial work types (after running migrations):
-
-```bash
-yarn prisma:seed
-```
